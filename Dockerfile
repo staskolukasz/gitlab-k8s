@@ -34,25 +34,21 @@ ADD https://storage.googleapis.com/kubernetes-release/release/v${KUBECTL_VERSION
 RUN set -x && \
     apk add --no-cache curl ca-certificates && \
     chmod +x /usr/local/bin/kubectl && \
-    \
-    # Create non-root user (with a randomly chosen UID/GUI).
     adduser kubectl -Du 2342 -h /config && \
-    \
-    # Basic check it works.
     kubectl version --client
 
 USER kubectl
 
 # Helm
 USER root
-RUN cd /home \
-	&& curl https://storage.googleapis.com/kubernetes-helm/helm-v${HELM_VERSION}-linux-amd64.tar.gz -o helm.tar.gz \
-	&& tar -xvf helm.tar.gz \
-	&& rm helm.tar.gz \
-	&& mv linux-amd64/helm /usr/local/bin/helm \
-	&& chmod +x /usr/local/bin/helm \
-	&& helm --help \
-	&& cd
+RUN cd /home && \
+	curl https://storage.googleapis.com/kubernetes-helm/helm-v${HELM_VERSION}-linux-amd64.tar.gz -o helm.tar.gz && \
+	tar -xvf helm.tar.gz && \
+	rm helm.tar.gz && \
+	mv linux-amd64/helm /usr/local/bin/helm && \
+	chmod +x /usr/local/bin/helm && \
+	helm --help && \
+	cd
 
 ENTRYPOINT /bin/sh
 
